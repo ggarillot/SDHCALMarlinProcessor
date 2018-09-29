@@ -67,7 +67,7 @@ FILE(GLOB_RECURSE sources "src/*.cc")
 
 # add library
 add_library( ${PROJECT_NAME} SHARED ${sources} ${headers} )
-install( TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib )
+install( TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/lib )
 
 # display some variables and write them to cache
 DISPLAY_STD_VARIABLES()
