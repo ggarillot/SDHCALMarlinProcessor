@@ -9,6 +9,7 @@ class Params :
 		self.outputFileName = 'analysis.root'
 		self.runNumber = 0
 		self.maxRecordNumber = 0
+		self.nLayers = 48
 		self.recoverXmlFile = ''
 
 def launch(a , files) :
@@ -41,6 +42,7 @@ def launch(a , files) :
   <parameter name="recoverXmlFile" type="string" >''' + a.recoverXmlFile + '''</parameter>
   <parameter name="RootFileName" type="string" >''' + tempOutputFile + '''</parameter>
   <parameter name="nRun" type="int">''' + str(a.runNumber) + '''</parameter>
+  <parameter name="NActiveLayers" type="int">''' + str(a.nLayers) + '''</parameter>
 
  </processor>
 

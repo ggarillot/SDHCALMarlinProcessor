@@ -300,6 +300,7 @@ void EfficiencyProcessor::processGeometry(std::string jsonFile)
 		return ;
 	}
 
+	_nActiveLayers = 0 ;
 	std::ifstream filea(jsonFile) ;
 	auto json = nlohmann::json::parse(filea) ;
 
@@ -308,12 +309,14 @@ void EfficiencyProcessor::processGeometry(std::string jsonFile)
 	for ( const auto& i : chambersList )
 	{
 		int slot = i.at("slot") ;
+		_nActiveLayers = std::max(_nActiveLayers , slot) ;
 
 		std::array<int,3> difLayer = {{ i.at("left") , i.at("center") , i.at("right") }} ;
 
 		difList.insert( {slot , difLayer} ) ;
 	}
 
+	_nActiveLayers++ ;
 	filea.close() ;
 }
 
@@ -540,10 +543,12 @@ void EfficiencyProcessor::end()
 	int globalNTrack = 0 ;
 	std::vector<double> globalEff(thresholds.size() , 0.0) ;
 	std::vector<double> globalEffErr(thresholds.size() , 0.0) ;
+	int nOkLayers = 0 ;
 
 	std::vector<double> globalMul(thresholds.size() , 0.0) ;
 	std::vector<double> globalMulErr(thresholds.size() , 0.0) ;
 	std::vector<int> nOkLayersForMul(thresholds.size() , 0) ;
+
 
 	for( std::vector<caloobject::Layer*>::const_iterator layIt = layers.begin() ; layIt != layers.end() ; ++layIt )
 	{
@@ -645,6 +650,9 @@ void EfficiencyProcessor::end()
 
 		globalNTrack += nTracks ;
 
+		if ( efficiencies.at(0) > 0 )
+			nOkLayers ++ ;
+
 		for ( unsigned int i = 0 ; i < thresholds.size() ; ++i )
 		{
 			globalEff.at(i) += efficiencies.at(i) ;
@@ -673,8 +681,8 @@ void EfficiencyProcessor::end()
 
 	for ( unsigned int i = 0 ; i < thresholds.size() ; ++i )
 	{
-		efficiencies.at(i) = ( globalEff.at(i)/layers.size() ) ;
-		//				efficiencies.at(i) = ( globalEff.at(i)/(layers.size()-2) ) ;
+//				efficiencies.at(i) = ( globalEff.at(i)/layers.size() ) ;
+		efficiencies.at(i) = ( globalEff.at(i)/nOkLayers ) ;
 		efficienciesError.at(i) = std::sqrt( 1.0/globalEffErr.at(i) ) ;
 
 		auto bound = getEfficienciesBound( static_cast<int>(efficiencies.at(i)*nTracks) , nTracks ) ;

@@ -5,6 +5,7 @@ import os
 class Params :
 	def __init__(self) :
 		self.collectionName = 'HCALEndcap'
+		self.maxRecordNumber = 0
 		self.cosThetaLimit = 0.9
 		self.thresholds = '1.0 2.0 3.0'
 		self.geometry = ''
@@ -29,7 +30,7 @@ def launch(a , files) :
  <global>
   <parameter name="LCIOInputFiles"> ''' + fileList + ''' </parameter>
   <!-- limit the number of processed records (run+evt): -->
-  <!--parameter name="MaxRecordNumber" value="100000"/-->
+  <parameter name="MaxRecordNumber" value="''' + str(a.maxRecordNumber) + '''"/>
   <!--parameter name="SkipNEvents" value="18000" /-->
   <parameter name="SupressCheck" value="false" />
   <!--parameter name="GearXMLFile"> gear_ldc.xml </parameter-->
