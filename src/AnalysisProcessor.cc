@@ -297,7 +297,7 @@ void AnalysisProcessor::init()
 	tree->Branch("nHit2Custom" , &nHit2Custom) ;
 	tree->Branch("nHit3Custom" , &nHit3Custom) ;
 
-	_timeCut = 5e9 ; //20 sec
+	_timeCut = 5 ; //5 sec
 	_prevBCID = 0 ;
 	_bcidRef = 0 ;
 
@@ -409,24 +409,26 @@ void AnalysisProcessor::processRunHeader(LCRunHeader*)
 	_nEvt = 0 ;
 }
 
-void AnalysisProcessor::findEventTime(LCEvent* evt , LCCollection* _col)
+void AnalysisProcessor::findEventTime(LCEvent* evt)
 {
-	unsigned int hitTime = 0 ;
-	EVENT::CalorimeterHit* hit = nullptr ;
-	if ( _col->getNumberOfElements() != 0 )
-	{
-		try
-		{
-			hit = dynamic_cast<EVENT::CalorimeterHit*>( _col->getElementAt(0) ) ;
-			hitTime = uint (hit->getTime() ) ;
+	unsigned int hitTime = static_cast<unsigned int>( evt->getParameters().getIntVal("eventTimeInTrigger") ) ;
+	trigger = static_cast<unsigned int>( evt->getParameters().getIntVal("trigger") ) ;
 
-		}
-		catch (std::exception e)
-		{
-			std::cout << "No hits " << std::endl ;
-			return ;
-		}
-	}
+//	EVENT::CalorimeterHit* hit = nullptr ;
+//	if ( _col->getNumberOfElements() != 0 )
+//	{
+//		try
+//		{
+//			hit = dynamic_cast<EVENT::CalorimeterHit*>( _col->getElementAt(0) ) ;
+//			hitTime = uint (hit->getTime() ) ;
+
+//		}
+//		catch (std::exception e)
+//		{
+//			std::cout << "No hits " << std::endl ;
+//			return ;
+//		}
+//	}
 
 	unsigned long long _bcid ;
 	unsigned long long _bcid1 = evt->parameters().getIntVal("bcid1") ;
@@ -439,7 +441,7 @@ void AnalysisProcessor::findEventTime(LCEvent* evt , LCCollection* _col)
 		return ;
 	}
 
-	unsigned long long Shift = 16777216ULL;
+	unsigned long long Shift = 16777216ULL ;
 	_bcid = _bcid1*Shift + _bcid2 ;
 	streamlog_out( DEBUG ) << "event : " << _nEvt+1 << " ; bcid: " << _bcid << " ; hitTime: " << hitTime << std::endl ;
 
@@ -461,7 +463,7 @@ void AnalysisProcessor::findEventTime(LCEvent* evt , LCCollection* _col)
 							   << " ; first reference : " << _bcidRef
 							   << std::endl;
 	}
-	else if ( (_bcid-_prevBCID)*200 < _timeCut )
+	else if ( (_bcid-_prevBCID)*200e-9 < _timeCut )
 	{
 		spillEvtTime = _bcid - _bcidRef + hitTime ;
 		streamlog_out( DEBUG ) << "event : " << _nEvt+1
@@ -633,7 +635,7 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 				continue ;
 			}
 
-			findEventTime(evt,col) ;
+			findEventTime(evt) ;
 
 			cerenkovTag = evt->parameters().getIntVal( "cerenkovTag" ) ;
 

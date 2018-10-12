@@ -22,11 +22,11 @@ if __name__ == '__main__' :
 	#dir = '/home/garillot/files/DATA/TRIVENT/SPS_Oct2015/214'
 	#dir = '/home/garillot/files/DATA/TRIVENT/electrons'
 	#dir = '/home/garillot/files/DATA/TRIVENT'
-	#dir = '/home/garillot/files/DATA/TRIVENT/H2Sept2017'
+	#dir = '/home/garillot/files/DATA/TRIVENT/H2_Sept2017'
 	#dir = '/home/garillot/files/DATA/TRIVENT/SPS_Apr2015'
 	#dir = '/home/garillot/files/DATA/TRIVENT/thrScan'
 	dir = '/home/garillot/files/DATA/TRIVENT/SPS_Sept2018'
-	
+
 	print ('Searching files in ' + dir)
 
 	#list files
@@ -37,11 +37,11 @@ if __name__ == '__main__' :
 			fileList.append(dir + '/' + fileName)
 
 
-	thr = '320-233-288'
-	runList = [743847,743848,743849,743850,743851,743853]
-	fileList = []
-	for run in runList :
-		fileList.append(dir + '/TDHCAL_' + str(run) + '.slcio')
+	#thr = 'uniformed'
+	#runList = [743898,743899,743900,743901,743902,743903,743904]
+	#fileList = []
+	#for run in runList :
+	#	fileList.append(dir + '/TDHCAL_' + str(run) + '.slcio')
 
 
 	#fileList = [ inputFilePath ]
@@ -61,7 +61,7 @@ if __name__ == '__main__' :
 		a.geometry = sys.argv[2]
 
 	a.outputFileName = 'Eff_' + runNumber + '.root'
-	a.outputFileName = 'Eff_' + thr + '.root'
+	#a.outputFileName = 'Eff_' + thr + '.root'
 
 	EfficiencyProcessor.launch(a , fileList)
 

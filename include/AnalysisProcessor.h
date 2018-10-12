@@ -85,7 +85,7 @@ class AnalysisProcessor : public Processor
 
 		void clearVec() ;
 
-		void findEventTime(LCEvent* evt , LCCollection* _col) ;
+		void findEventTime(LCEvent* evt ) ;
 
 		double getFirst5LayersRMS() ;
 
@@ -156,8 +156,7 @@ class AnalysisProcessor : public Processor
 		unsigned long long _bcidRef = 0 ;
 
 		unsigned long long firstBCIDOfRun = 0 ;
-
-		int _timeDif_minus_bif = 0 ;
+		unsigned int currentTrigger = 0 ;
 
 		/*--------------------Root output object--------------------*/
 		std::string outputRootName = "" ;
@@ -166,6 +165,7 @@ class AnalysisProcessor : public Processor
 
 		double computingTime = 0 ;
 
+		int trigger = 0 ;
 		int eventNumber = 0 ;
 		unsigned long long evtTime = 0 ;
 		unsigned long long spillEvtTime = 0 ;
