@@ -8,7 +8,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)
 # project name
 PROJECT( sdhcalMarlin )
 
-#run cmake in build directory with : 
+#run cmake in build directory with :
 # cmake -C ${ILCSOFT}/ILCSoft.cmake -DCaloSoftWare_DIR=${CaloSoftWare} ../
 
 # project version
@@ -31,26 +31,26 @@ FIND_PACKAGE( CLHEP REQUIRED )
 FIND_PACKAGE( LCIO REQUIRED )
 
 FOREACH( pkg LCIO ROOT Marlin CLHEP )
-    IF( ${pkg}_FOUND )
-        INCLUDE_DIRECTORIES( SYSTEM ${${pkg}_INCLUDE_DIRS} )
-        LINK_LIBRARIES( ${${pkg}_LIBRARIES} )
-        ADD_DEFINITIONS ( ${${pkg}_DEFINITIONS} )
+	IF( ${pkg}_FOUND )
+		INCLUDE_DIRECTORIES( SYSTEM ${${pkg}_INCLUDE_DIRS} )
+		LINK_LIBRARIES( ${${pkg}_LIBRARIES} )
+		ADD_DEFINITIONS ( ${${pkg}_DEFINITIONS} )
 
-    ENDIF()
+	ENDIF()
 ENDFOREACH()
 
-FIND_PACKAGE( CaloSoftWare 1.1.6 REQUIRED )
+FIND_PACKAGE( CaloSoftWare 1.1.7 REQUIRED )
 FOREACH( pkg CaloSoftWare )
 	INCLUDE_DIRECTORIES( SYSTEM ${${pkg}_INCLUDE_DIRS} )
-    LINK_LIBRARIES( ${${pkg}_LIBRARIES} )
-    ADD_DEFINITIONS ( ${${pkg}_DEFINITIONS} )
+	LINK_LIBRARIES( ${${pkg}_LIBRARIES} )
+	ADD_DEFINITIONS ( ${${pkg}_DEFINITIONS} )
 ENDFOREACH()
 
 ### DOCUMENTATION ###########################################################
 
 OPTION( INSTALL_DOC "Set to OFF to skip build/install Documentation" ON )
 IF( INSTALL_DOC AND EXISTS "${PROJECT_SOURCE_DIR}/doc/CMakeLists.txt" )
-    ADD_SUBDIRECTORY( ./doc )
+	ADD_SUBDIRECTORY( ./doc )
 ENDIF()
 
 

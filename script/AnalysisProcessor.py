@@ -10,6 +10,7 @@ class Params :
 		self.runNumber = 0
 		self.maxRecordNumber = 0
 		self.nLayers = 48
+		self.thresholds = '1.0 2.0 3.0'
 		self.recoverXmlFile = ''
 
 def launch(a , files) :
@@ -43,6 +44,7 @@ def launch(a , files) :
   <parameter name="RootFileName" type="string" >''' + tempOutputFile + '''</parameter>
   <parameter name="nRun" type="int">''' + str(a.runNumber) + '''</parameter>
   <parameter name="NActiveLayers" type="int">''' + str(a.nLayers) + '''</parameter>
+  <parameter name="Thresholds" type="floatVec">''' + str(a.thresholds) + '''</parameter>  
 
  </processor>
 

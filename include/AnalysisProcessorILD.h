@@ -22,7 +22,6 @@
 #include "Algorithm/InteractionFinder.h"
 #include "Algorithm/Efficiency.h"
 #include "Algorithm/AsicKeyFinder.h"
-#include "Algorithm/ShowerAnalyser.h"
 #include "Algorithm/Density.h"
 
 #include <TFile.h>

@@ -414,21 +414,21 @@ void AnalysisProcessor::findEventTime(LCEvent* evt)
 	unsigned int hitTime = static_cast<unsigned int>( evt->getParameters().getIntVal("eventTimeInTrigger") ) ;
 	trigger = static_cast<unsigned int>( evt->getParameters().getIntVal("trigger") ) ;
 
-//	EVENT::CalorimeterHit* hit = nullptr ;
-//	if ( _col->getNumberOfElements() != 0 )
-//	{
-//		try
-//		{
-//			hit = dynamic_cast<EVENT::CalorimeterHit*>( _col->getElementAt(0) ) ;
-//			hitTime = uint (hit->getTime() ) ;
+	//	EVENT::CalorimeterHit* hit = nullptr ;
+	//	if ( _col->getNumberOfElements() != 0 )
+	//	{
+	//		try
+	//		{
+	//			hit = dynamic_cast<EVENT::CalorimeterHit*>( _col->getElementAt(0) ) ;
+	//			hitTime = uint (hit->getTime() ) ;
 
-//		}
-//		catch (std::exception e)
-//		{
-//			std::cout << "No hits " << std::endl ;
-//			return ;
-//		}
-//	}
+	//		}
+	//		catch (std::exception e)
+	//		{
+	//			std::cout << "No hits " << std::endl ;
+	//			return ;
+	//		}
+	//	}
 
 	unsigned long long _bcid ;
 	unsigned long long _bcid1 = evt->parameters().getIntVal("bcid1") ;
@@ -608,16 +608,20 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 			for ( int j = 0 ; j < numElements ; ++j )
 			{
 				CalorimeterHit* hit = dynamic_cast<CalorimeterHit*>( col->getElementAt( j ) ) ;
+
+				if ( hit->getEnergy() < thresholds[0] )
+					continue ;
+
 				CLHEP::Hep3Vector vec(hit->getPosition()[0],hit->getPosition()[1],hit->getPosition()[2]);
 
-								int cellID[] = { static_cast<int>( IDdecoder(hit)["I"]) , static_cast<int>( IDdecoder(hit)["J"]) , static_cast<int>( IDdecoder(hit)["K-1"]) } ;
-//				int cellID[] = { static_cast<int>( IDdecoder(hit)["x"]) + 48 , static_cast<int>( IDdecoder(hit)["y"]) + 48 , static_cast<int>( IDdecoder(hit)["layer"]) } ;
+				int cellID[] = { static_cast<int>( IDdecoder(hit)["I"]) , static_cast<int>( IDdecoder(hit)["J"]) , static_cast<int>( IDdecoder(hit)["K-1"]) } ;
+				//				int cellID[] = { static_cast<int>( IDdecoder(hit)["x"]) + 48 , static_cast<int>( IDdecoder(hit)["y"]) + 48 , static_cast<int>( IDdecoder(hit)["layer"]) } ;
 
 				if ( cellID[2] >= _nActiveLayers )
 					continue ;
 
-//				if ( cellID[2] == 1 || cellID[2] == 34 )
-//					continue ;
+				//				if ( cellID[2] == 1 || cellID[2] == 34 )
+				//					continue ;
 
 				if ( cellID[0] < 1 || cellID[0] > 96 || cellID[1] < 1 || cellID[1] > 96 )
 					continue ;
@@ -647,7 +651,7 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 			std::sort(clusterVec.begin() , clusterVec.end() , algorithm::ClusteringHelper::SortClusterByLayer) ;
 
 
-			caloobject::DigitalShower* shower = new caloobject::DigitalShower(clusterVec) ;
+			caloobject::DigitalShower* shower = new caloobject::DigitalShower(clusterVec , {{thresholds.at(0) , thresholds.at(1) , thresholds.at(2)}}) ;
 
 			shower->setInteractionSettings(m_InteractionFinderParameterSetting) ;
 			shower->setGeometrySettings(m_CaloGeomSetting) ;

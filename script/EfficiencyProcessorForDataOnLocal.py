@@ -24,8 +24,8 @@ if __name__ == '__main__' :
 	#dir = '/home/garillot/files/DATA/TRIVENT'
 	#dir = '/home/garillot/files/DATA/TRIVENT/H2_Sept2017'
 	#dir = '/home/garillot/files/DATA/TRIVENT/SPS_Apr2015'
-	#dir = '/home/garillot/files/DATA/TRIVENT/thrScan'
-	dir = '/home/garillot/files/DATA/TRIVENT/SPS_Sept2018'
+	dir = '/home/guillaume/files/DATA/TRIVENT/thrScan'
+	#dir = '/home/garillot/files/DATA/TRIVENT/SPS_Sept2018'
 
 	print ('Searching files in ' + dir)
 
@@ -49,9 +49,9 @@ if __name__ == '__main__' :
 	print fileList
 
 
-	os.environ["MARLIN"] = '/home/garillot/ilcsoft/v01-19-05/Marlin/v01-15-02'
+	os.environ["MARLIN"] = '/home/guillaume/ilcsoft/v02-00-01/Marlin/v01-16'
 	os.environ["PATH"] = os.environ["MARLIN"] + '/bin:' + os.environ["PATH"]
-	os.environ["MARLIN_DLL"] = '/home/garillot/SDHCALMarlinProcessor/lib/libsdhcalMarlin.so'
+	os.environ["MARLIN_DLL"] = '/home/guillaume/SDHCALMarlinProcessor/lib/libsdhcalMarlin.so'
 
 
 	a = EfficiencyProcessor.Params()
