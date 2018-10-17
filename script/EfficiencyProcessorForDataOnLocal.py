@@ -24,7 +24,8 @@ if __name__ == '__main__' :
 	#dir = '/home/garillot/files/DATA/TRIVENT'
 	#dir = '/home/garillot/files/DATA/TRIVENT/H2_Sept2017'
 	#dir = '/home/garillot/files/DATA/TRIVENT/SPS_Apr2015'
-	dir = '/home/guillaume/files/DATA/TRIVENT/thrScan'
+	#dir = '/home/guillaume/files/DATA/TRIVENT/thrScan'
+	dir = '/home/guillaume/files/DATA/TRIVENT/SPS_Oct2016'	
 	#dir = '/home/garillot/files/DATA/TRIVENT/SPS_Sept2018'
 
 	print ('Searching files in ' + dir)
