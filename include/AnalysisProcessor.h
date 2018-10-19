@@ -218,6 +218,9 @@ class AnalysisProcessor : public Processor
 		std::vector<float> densityVec = {} ;
 
 		double emFraction = 0 ;
+		float depositedEnergy = 0.0f ;
+		float depositedEnergyNeutrons = 0.0f ;
+		float leakedEnergy = 0.0f ;
 
 		float nHitCustom = 0 ;
 		float nHit1Custom = 0 ;

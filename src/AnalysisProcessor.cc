@@ -815,6 +815,10 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 
 			emFraction = evt->getParameters().getFloatVal( std::string("EMFraction") ) ;
 
+			depositedEnergy = evt->getParameters().getFloatVal( std::string("DepositedEnergy") ) ;
+			depositedEnergyNeutrons = evt->getParameters().getFloatVal( std::string("DepositedEnergyNeutron") ) ;
+			leakedEnergy = evt->getParameters().getFloatVal( std::string("LeakedEnergy") ) ;
+
 			computingTime = 1.0*( clock() - beginClock )/CLOCKS_PER_SEC ;
 
 			tree->Fill() ;

@@ -32,7 +32,6 @@
 using namespace lcio ;
 using namespace marlin ;
 
-
 class EfficiencyProcessor : public Processor
 {
 
