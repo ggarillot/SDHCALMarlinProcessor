@@ -206,6 +206,9 @@ class AnalysisProcessor : public Processor
 		double meanRadius = 0 ;
 
 		bool neutral = 0 ;
+		bool single = 0 ;
+
+		float propLastLayers = 0.0 ;
 
 		std::vector<double> longiProfile = {} ;
 		std::vector<double> radiProfile = {} ;

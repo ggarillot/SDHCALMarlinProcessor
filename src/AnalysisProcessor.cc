@@ -281,6 +281,9 @@ void AnalysisProcessor::init()
 
 	tree->Branch("first5LayersRMS" , &first5LayersRMS) ;
 	tree->Branch("neutral" , &neutral) ;
+	tree->Branch("single" , &single) ;
+
+	tree->Branch("propLastLayers" , &propLastLayers) ;
 
 	tree->Branch("emFraction" , &emFraction) ;
 
@@ -494,13 +497,33 @@ double AnalysisProcessor::getFirst5LayersRMS()
 	double xsum = 0 , x2sum = 0 , ysum = 0 , y2sum = 0 ;
 	int n = 0 ;
 
-	for( std::vector<caloobject::CaloCluster2D*>::const_iterator it = clusterVec.begin() ; it != clusterVec.end() ; ++it )
+	const unsigned int nFirstLayers = 4 ;
+	std::vector<float> rmsVec(nFirstLayers,0.0f) ;
+
+	std::vector<float> xSumVec(nFirstLayers,0.0f) ;
+	std::vector<float> x2SumVec(nFirstLayers,0.0f) ;
+	std::vector<float> ySumVec(nFirstLayers,0.0f) ;
+	std::vector<float> y2SumVec(nFirstLayers,0.0f) ;
+	std::vector<unsigned int> nVec(nFirstLayers,0U) ;
+
+	for ( const auto& cluster : clusterVec )
 	{
-		if ( (*it)->getLayerID() > 5 )
+		unsigned int i = static_cast<unsigned int>( cluster->getLayerID() ) ;
+		unsigned int size = static_cast<unsigned int>( cluster->getHits().size() ) ;
+		if ( i >= nFirstLayers )
 			break ;
 
-		double x = (*it)->getPosition()[0] ;
-		double y = (*it)->getPosition()[1] ;
+		double x = cluster->getPosition()[0] ;
+		double y = cluster->getPosition()[1] ;
+
+		xSumVec.at(i) += x*size ;
+		x2SumVec.at(i) += x*x*size ;
+
+		ySumVec.at(i) += y*size ;
+		y2SumVec.at(i) += y*y*size ;
+
+		nVec.at(i) += size ;
+
 		xsum += x ;
 		x2sum += x*x ;
 		ysum += y ;
@@ -508,6 +531,20 @@ double AnalysisProcessor::getFirst5LayersRMS()
 
 		n++ ;
 	}
+
+	for ( unsigned int i = 0 ; i < nFirstLayers ; ++i )
+		rmsVec.at(i) = std::sqrt( x2SumVec.at(i)/(nVec.at(i)-1) - (xSumVec.at(i)*xSumVec.at(i))/(nVec.at(i)*(nVec.at(i)-1)) + y2SumVec.at(i)/(nVec.at(i)-1) - (ySumVec.at(i)*ySumVec.at(i))/(nVec.at(i)*(nVec.at(i)-1)) ) ;
+
+	unsigned int ctr = 0 ;
+	for ( const auto& l : rmsVec )
+	{
+		if ( l > 50 )
+			ctr++ ;
+	}
+
+	single = true ;
+	if ( ctr > 2 )
+		single = false ;
 
 	if ( n < 2 )
 		return 0 ;
@@ -692,6 +729,9 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 
 			auto densityPerHit = algo_density->getDensityPerHit() ;
 
+			unsigned int nLast7Layers = 0 ;
+			unsigned int nFirst30Layers = 0 ;
+
 			for ( auto hit : shower->getHits() )
 			{
 				iVec.push_back( hit->getCellID()[0] ) ;
@@ -701,7 +741,14 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 				timeVec.push_back( hit->getTime() ) ;
 
 				densityVec.push_back( densityPerHit.at(hit) ) ;
+
+				if ( hit->getCellID()[2] < 30 )
+					nFirst30Layers++ ;
+				if ( hit->getCellID()[2] > 40 )
+					nLast7Layers++ ;
 			}
+
+			propLastLayers = 1.0f*nLast7Layers/nFirst30Layers ;
 
 			//			if ( !shower->getFirstIntCluster() )
 			//				begin = -10 ;
@@ -760,6 +807,7 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 			begin = -10 ;
 			algo_InteractionFinder->SetInteractionFinderParameterSetting(m_InteractionFinderParameterSetting) ;
 			algo_InteractionFinder->Run(clusterVec ,  trackVec , shower->getThrust()) ;
+//			algo_InteractionFinder->Run(clusterVec , shower->getThrust()) ;
 			if( algo_InteractionFinder->FindInteraction() )
 				begin = algo_InteractionFinder->getFirstInteractionCluster()->getLayerID() ;
 
