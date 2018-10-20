@@ -533,7 +533,7 @@ double AnalysisProcessor::getFirst5LayersRMS()
 	}
 
 	for ( unsigned int i = 0 ; i < nFirstLayers ; ++i )
-		rmsVec.at(i) = std::sqrt( x2SumVec.at(i)/(nVec.at(i)-1) - (xSumVec.at(i)*xSumVec.at(i))/(nVec.at(i)*(nVec.at(i)-1)) + y2SumVec.at(i)/(nVec.at(i)-1) - (ySumVec.at(i)*ySumVec.at(i))/(nVec.at(i)*(nVec.at(i)-1)) ) ;
+		rmsVec.at(i) = std::sqrt( x2SumVec.at(i)/nVec.at(i) - ( xSumVec.at(i)*xSumVec.at(i) )/( nVec.at(i)*nVec.at(i) ) + y2SumVec.at(i)/nVec.at(i) - ( ySumVec.at(i)*ySumVec.at(i) )/( nVec.at(i)*nVec.at(i) ) ) ;
 
 	unsigned int ctr = 0 ;
 	for ( const auto& l : rmsVec )
@@ -543,7 +543,7 @@ double AnalysisProcessor::getFirst5LayersRMS()
 	}
 
 	single = true ;
-	if ( ctr > 2 )
+	if ( ctr > 3 )
 		single = false ;
 
 	if ( n < 2 )
