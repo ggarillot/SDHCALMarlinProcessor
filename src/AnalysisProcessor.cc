@@ -286,6 +286,10 @@ void AnalysisProcessor::init()
 	tree->Branch("propLastLayers" , &propLastLayers) ;
 
 	tree->Branch("emFraction" , &emFraction) ;
+	tree->Branch("depositedEnergy" , &depositedEnergy) ;
+	tree->Branch("depositedEnergyNeutrons" , &depositedEnergyNeutrons) ;
+	tree->Branch("leakedEnergy" , &leakedEnergy) ;
+	tree->Branch("nNeutrons" , &nNeutrons) ;
 
 	tree->Branch("I" , "std::vector<int>" , &iVec) ;
 	tree->Branch("J" , "std::vector<int>" , &jVec) ;
@@ -807,7 +811,7 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 			begin = -10 ;
 			algo_InteractionFinder->SetInteractionFinderParameterSetting(m_InteractionFinderParameterSetting) ;
 			algo_InteractionFinder->Run(clusterVec ,  trackVec , shower->getThrust()) ;
-//			algo_InteractionFinder->Run(clusterVec , shower->getThrust()) ;
+			//			algo_InteractionFinder->Run(clusterVec , shower->getThrust()) ;
 			if( algo_InteractionFinder->FindInteraction() )
 				begin = algo_InteractionFinder->getFirstInteractionCluster()->getLayerID() ;
 
@@ -862,10 +866,10 @@ void AnalysisProcessor::processEvent( LCEvent * evt )
 				energy = evt->getParameters().getFloatVal( std::string("ParticleEnergy") ) ;
 
 			emFraction = evt->getParameters().getFloatVal( std::string("EMFraction") ) ;
-
 			depositedEnergy = evt->getParameters().getFloatVal( std::string("DepositedEnergy") ) ;
 			depositedEnergyNeutrons = evt->getParameters().getFloatVal( std::string("DepositedEnergyNeutron") ) ;
 			leakedEnergy = evt->getParameters().getFloatVal( std::string("LeakedEnergy") ) ;
+			nNeutrons = evt->getParameters().getIntVal( std::string("nNeutrons") ) ;
 
 			computingTime = 1.0*( clock() - beginClock )/CLOCKS_PER_SEC ;
 

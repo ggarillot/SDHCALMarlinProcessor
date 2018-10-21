@@ -224,6 +224,7 @@ class AnalysisProcessor : public Processor
 		float depositedEnergy = 0.0f ;
 		float depositedEnergyNeutrons = 0.0f ;
 		float leakedEnergy = 0.0f ;
+		int nNeutrons = 0 ;
 
 		float nHitCustom = 0 ;
 		float nHit1Custom = 0 ;
